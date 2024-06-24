@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARNING! Virus Detected</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding-top: 50px;
+            overflow: hidden;
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            box-shadow: 0px 0px 10px black;
+            z-index: 1000;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+        }
+        .random-image {
+            position: absolute;
+            z-index: 500;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+    <script>
+        function showPopups() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    let popup = document.createElement('div');
+                    popup.className = 'popup';
+                    popup.innerHTML = `WARNING! Your computer is infected! <button onclick="this.parentElement.remove()">Close</button>`;
+                    document.body.appendChild(popup);
+                }, i * 1000);
+            }
+        }
+
+        function showRandomImages() {
+            const imageUrls = [
+                'https://rs.unud.ac.id/wp-content/uploads/2020/02/novel-corona-virus.jpg',
+                'https://diskominfo.badungkab.go.id/storage/olds/diskominfo/Mengenal-Virus-Komputer_965842.jpg',
+                'https://socs.binus.ac.id/files/2018/12/bk-7.jpg',
+                'https://gamebrott.com/wp-content/uploads/2021/10/virus-komputer.jpg',
+                'https://ketik.co.id/assets/upload/2024050914005810003129010.webp'
+            ];
+
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    let img = document.createElement('img');
+                    img.src = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+                    img.className = 'random-image';
+                    img.style.top = Math.random() * 100 + 'vh';
+                    img.style.left = Math.random() * 100 + 'vw';
+                    document.body.appendChild(img);
+                }, i * 500);
+            }
+        }
+
+        window.onload = function() {
+            showPopups();
+            showRandomImages();
+            document.addEventListener('click', checkAllPopupsClosed);
+        }
+        
+    function logEvent(eventType) {
+        fetch('http://localhost/log_event.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'event_type=' + eventType,
+        })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function showPopups() {
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                let popup = document.createElement('div');
+                popup.className = 'popup';
+                popup.innerHTML = 'WARNING! Your computer is infected! <button onclick="this.parentElement.remove()">Close</button>';
+                document.body.appendChild(popup);
+                logEvent('popup_shown');
+            }, i * 1000);
+        }
+    }
+
+    function showRandomImages() {
+        const imageUrls = [
+            'https://rs.unud.ac.id/wp-content/uploads/2020/02/novel-corona-virus.jpg',
+            'https://diskominfo.badungkab.go.id/storage/olds/diskominfo/Mengenal-Virus-Komputer_965842.jpg',
+            'https://socs.binus.ac.id/files/2018/12/bk-7.jpg',
+            'https://gamebrott.com/wp-content/uploads/2021/10/virus-komputer.jpg',
+            'https://ketik.co.id/assets/upload/2024050914005810003129010.webp'
+        ];
+
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                let img = document.createElement('img');
+                img.src = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+                img.className = 'random-image';
+                img.style.top = Math.random() * 100 + 'vh';
+                img.style.left = Math.random() * 100 + 'vw';
+                document.body.appendChild(img);
+                logEvent('random_image_shown');
+            }, i * 500);
+        }
+    }
+
+    window.onload = function() {
+        showPopups();
+        showRandomImages();
+        logEvent('virus_page_loaded');
+    }
+
+    document.addEventListener('click', function() {
+        logEvent('popup_closed');
+    });
+    </script>
+</head>
+<body>
+    <div class="overlay"></div>
+    <header>
+        <h1>WARNING! Virus Detected</h1>
+    </header>
+    <main>
+        <p>Your system is infected. Please close all pop-ups to remove the virus.</p>
+    </main>
+</body>
+</html>

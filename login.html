@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 100px; /* Adjusted padding to ensure header doesn't overlap content */
+            background-color: #f6f6f6;
+        }
+        .login-form {
+            max-width: 300px;
+            margin: 100px auto 0; /* Adjusted top margin to move login box further down */
+            border: 1px solid #ccc;
+            border-radius: 15px; /* Rounded corner for the form */
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-form input {
+            display: block;
+            width: 80%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px; /* Rounded corner for inputs */
+            border: 1px solid #ccc;
+        }
+        .login-form button {
+            padding: 10px;
+            background-color: #000000;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded corner for button */
+            width: 80%;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px black;
+            z-index: 1000;
+            text-align: center;
+            border-radius: 10px; /* Rounded corner for popup */
+        }
+        .popup button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px; /* Rounded corner for popup buttons */
+        }
+        header {
+            position: fixed; /* Make the header fixed at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure the header is above other content */
+        }
+        .header-left img {
+            margin-right: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function showConfirmationPopup(event) {
+            event.preventDefault();
+            document.getElementById('confirmation-popup').style.display = 'block';
+            logEvent('confirmation_popup_shown');
+        }
+
+        function handleConfirmation(choice) {
+            document.getElementById('confirmation-popup').style.display = 'none';
+            logEvent('confirmation_choice_' + choice);
+            if (choice === 'yes') {
+                window.location.href = "virus.html";
+            } else {
+                alert("Selamat, Anda terhindar dari virus");
+            }
+        }
+
+        function logEvent(eventType) {
+            fetch('http://localhost/log_event.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'event_type=' + eventType,
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+
+        document.getElementById('login-button').addEventListener('click', function() {
+            logEvent('login_button_click');
+        });
+
+        window.addEventListener('beforeunload', function() {
+            logEvent('page_exit');
+        });
+
+        // Event listener for link click
+        document.getElementById('sample-link').addEventListener('click', function() {
+            logEvent('link_click');
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="logoinstagram.png" alt="Instagram Logo">
+        </div>
+        <h1>Instagram</h1>
+    </header>
+    <div class="login-form">
+        <input type="text" placeholder="Username" required>
+        <input type="password" placeholder="Password" required>
+        <button id="login-button" onclick="showConfirmationPopup(event)">Log In</button>
+    </div>
+    <div id="confirmation-popup" class="popup">
+        <p>Apakah Anda yakin ingin masuk akun?</p>
+        <button onclick="handleConfirmation('yes')">Iya</button>
+        <button onclick="handleConfirmation('no')">Tidak</button>
+    </div>
+
+    <div class="phishing-education" style="max-width: 300px; margin: 20px auto;">
+        <h2>Apa itu Phishing?</h2>
+        <p>Phishing adalah usaha untuk mendapatkan informasi pribadi seperti username, password, dan data sensitif lainnya dengan menyamar sebagai entitas yang tepercaya dalam komunikasi elektronik.</p>
+        <p>Selalu pastikan Anda hanya memasukkan informasi Anda di situs web yang Anda percayai.</p>
+    </div>
+
+</body>
+</html>
